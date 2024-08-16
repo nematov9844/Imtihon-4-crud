@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .box {
+        display: flex;
+        justify-content: center;
+        border: 2px solid black;
+      }
+
+      .user_tr {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .overlay {
+        display: none;
+      }
+
+      .active {
+        display: flex !important;
+      }
+    </style>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body>
+    <div
+      class="w-full mx-auto my-4 md:w-[50%] p-5 rounded-lg bg-[#f7fafc] dark:bg-[#171923] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]"
+    >
+      <h1 class="font-bold text-3xl text-center">Todo</h1>
+      <form class="pt-2">
+        <div class="w-full flex flex-col gap-2 pb-3">
+          <input
+            id="text"
+            placeholder="Todo..."
+            class="name_inpt rounded-md bg-transparent p-2 color-white text-[black] dark:text-white outline outline-2 transition-all ease-in-out"
+            autocomplete="off"
+            type="text"
+          />
+        </div>
+        <button
+          id="btn"
+          type="submit"
+          class="w-[100%] bg-teal-500 py-4 font-medium bg text-[17px] bg-ContactButton cursor-pointer border-none rounded-md transition ease-in-out hover:bg-ContactButtonHover"
+        >
+          Kirish &gt;
+        </button>
+      </form>
+
+      <table class="w-[100%] mt-4 bg-green-500 mx-auto">
+        <thead>
+          <tr class="text-left p-2">
+            <th>Todo</th>
+            <th>date</th>
+            <th class="text-right pr-4">action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    
+    
+
+    <div
+      class="overlay fixed bg-[#00000062] top-0 left-0 min-h-full w-full items-center justify-center"
+    >
+      <div
+        class="modal_content sm:w-[600px] bg-white opacity-100 p-4 rounded-xl"
+      >
+        <div class="modal_header flex items-center justify-between">
+          <h2
+            class="text-[30px] font-bold"
+            title="Bu title hover bolganda korinadi yoki kozi ojizlarga yordam biradi "
+          >
+            Title
+          </h2>
+          <button
+            class="close py-1 px-3 rounded-[10px] font-bold border border-red-400"
+          >
+            X
+          </button>
+        </div>
+        <div class="modal_content">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda
+          quidem officiis, nemo nulla reiciendis, quam ab ratione consequatur
+          magnam itaque cumque maiores atque corrupti ea sequi quia debitis
+          quae, nesciunt cum? Itaque earum iusto minus, obcaecati quasi saepe
+          corrupti fuga veniam iure ciendis nostrum eveniet nam doloribus
+          reprehenderit neque. Aperiam distinctio alias quo ut magni nihil earum
+          sed!
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

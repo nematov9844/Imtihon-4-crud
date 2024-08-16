@@ -1,0 +1,73 @@
+/* Center the modal within the viewport */
+#modal {
+    display: none; /* Initially hidden */
+    position: fixed; /* Fixed positioning to keep it in place */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 1000; /* Ensure it appears above other elements */
+}
+
+/* Modal content styling */
+.modal-dialog {
+    max-width: 600px; /* Limit width for better readability */
+    margin: auto; /* Auto margin for center alignment */
+}
+
+.modal-content {
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow for a clean look */
+}
+
+/* Styling for the modal header */
+.modal-header {
+    background-color: #343a40; /* Dark background for header */
+    color: white; /* White text for contrast */
+}
+
+/* Form input styling */
+#form input[type="text"],
+#form input[type="number"],
+#form select {
+    width: 100%; /* Full width inputs */
+    padding: 10px; /* Padding for better touch targets */
+    margin-bottom: 15px; /* Spacing between inputs */
+    border: 1px solid #ced4da; /* Border similar to Bootstrap inputs */
+    border-radius: 5px; /* Slightly rounded corners */
+    box-sizing: border-box; /* Include padding and border in total width */
+}
+#form input[type="color"]{
+    width: 20%; /* Full width inputs */
+    padding: 0; /* Padding for better touch targets */
+    margin-bottom: 15px; /* Spacing between inputs */
+    border: 1px solid #ced4da; /* Border similar to Bootstrap inputs */
+    border-radius: 5px; /* Slightly rounded corners */
+    box-sizing: border-box; /* Include padding and border in total width */
+}
+
+
+/* Button styling */
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: white;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between; /* Distribute buttons evenly */
+    padding: 15px; /* Padding for better touch targets */
+}

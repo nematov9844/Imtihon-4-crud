@@ -1,0 +1,20 @@
+{
+  "prodact": [
+    {
+      "id": "bfac",
+      "name": "salom",
+      "price": "2424",
+      "seria": "424324",
+      "select": "samsung",
+      "color": "#ff0000"
+    },
+    {
+      "id": "a319",
+      "name": "Jeki",
+      "price": "123",
+      "seria": "324567",
+      "select": "redmi",
+      "color": "#ff0000"
+    }
+  ]
+}
