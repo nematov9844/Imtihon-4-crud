@@ -1,103 +1,123 @@
-let modal = document.getElementById("modal");
-modal.style.display = "none";
-let form = {};
-let baseUrl = "http://localhost:8000/prodact";
-let editingItemId = null;
+const apiUrl = 'http://localhost:3000/users';
+const userModal = document.getElementById('userModal');
+const modalForm = document.getElementById('modalForm');
+const userList = document.getElementById('userList');
+const searchInput = document.getElementById('search');
+const sortSelect = document.getElementById('sort');
+const addUserBtn = document.getElementById('addUserBtn');
+const closeModalBtn = document.getElementById('closeModal');
 
-function openModal() {
-  if (modal.style.display === "none") {
-    modal.style.display = "flex";
-  } else {
-    modal.style.display = "none";
-  }
-}
+let users = [];
+let editingUserId = null;
 
-async function saveForm(event) {
-  let { name, value } = event.target;
-  form = { ...form, [name]: value };
-  console.log(name, value);
-}
-
-document.getElementById("save").addEventListener("click", async function (evn) {
-  evn.preventDefault();
-  const url = editingItemId ? `${baseUrl}/${editingItemId}` : baseUrl;
-  const method = editingItemId ? "PUT" : "POST";
-
-  fetch(url, {
-    method: method,
-    body: JSON.stringify(form),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      editingItemId = null;
-      getData();
-    });
+addUserBtn.addEventListener('click', () => {
+    editingUserId = null;
+    modalForm.reset();
+    userModal.classList.remove('hidden');
 });
 
-async function getData() {
-  const response = await fetch(baseUrl);
-  const data = await response.json();
-  if (response.status === 200) {
-    console.log(data);
-    displayAdd(data);
-  } else {
-    alert("Error");
-  }
-}
-getData();
-
-function displayAdd(data) {
-  tbody.innerHTML = "";
-  console.log(data);
-  data.forEach((item, index) => {
-    console.log(item);
-    tbody.innerHTML += `
-      <tr>
-        <th scope="col">${index + 1}</th>
-        <td scope="col">${item.name}</td>
-        <td scope="col">${item.price}</td>
-        <td scope="col">${item.seria}</td>
-        <td scope="col">${item.select}</td>
-        <td scope="col">${item.color}</td>
-        <td>
-          <button id="${item.id}" onclick="editFunc('${item.id}')" class="edit btn btn-success">
-            Edit
-          </button>
-          <button id="${item.id}" class="delete btn btn-danger">
-            Delete
-          </button>
-        </td>
-      </tr>
-    `;
-  });
-}
-
-tbody.addEventListener("click", (evt) => {
-  evt.preventDefault();
-  if (evt.target.matches(".delete")) {
-    let id = evt.target.id;
-    fetch(`${baseUrl}/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => getData());
-  }
+closeModalBtn.addEventListener('click', () => {
+    userModal.classList.add('hidden');
 });
 
-async function editFunc(id) {
-  try {
-    const response = await fetch(`${baseUrl}/${id}`);
-    const item = await response.json();
-    editingItemId = id; 
-    form = { ...item }; 
-    document.querySelectorAll('#modal input').forEach(input => {
-      input.value = item[input.name] || '';
-    });
-    openModal(); 
-  } catch (error) {
-    console.log(error);
-  }
+modalForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    const user = {
+        name: document.getElementById('name').value,
+        surname: document.getElementById('surname').value,
+        age: parseInt(document.getElementById('age').value, 10),
+        color: document.getElementById('color').value,
+    };
+
+    if (editingUserId) {
+        await updateUser(editingUserId, user);
+    } else {
+        await addUser(user);
+    }
+
+    userModal.classList.add('hidden');
+    fetchUsers();
+});
+
+async function fetchUsers() {
+    const response = await fetch(apiUrl);
+    users = await response.json();
+    renderUsers();
 }
+
+async function addUser(user) {
+    await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    });
+}
+
+async function updateUser(id, user) {
+    await fetch(`${apiUrl}/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    });
+}
+
+async function deleteUser(id) {
+    await fetch(`${apiUrl}/${id}`, {
+        method: 'DELETE'
+    });
+    fetchUsers();
+}
+
+function renderUsers() {
+    const filteredUsers = users
+        .filter(user => 
+            user.name.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+            user.surname.toLowerCase().includes(searchInput.value.toLowerCase())
+        )
+        .sort((a, b) => {
+            if (sortSelect.value === 'name') {
+                return a.name.localeCompare(b.name);
+            } else if (sortSelect.value === 'age') {
+                return a.age - b.age;
+            }
+        });
+
+    userList.innerHTML = '';
+
+    filteredUsers.forEach(user => {
+        const li = document.createElement('li');
+        li.className = 'flex justify-between items-center p-2 bg-gray-100 rounded';
+        li.innerHTML = `
+            <span>${user.name} ${user.surname}, Age: ${user.age}, Favorite Color: <span style="background-color: ${user.color}; width: 16px; height: 16px; display: inline-block;"></span></span>
+            <div class="space-x-2">
+                <button class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600" onclick="editUser(${user.id})">Edit</button>
+                <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onclick="deleteUser(${user.id})">Delete</button>
+            </div>
+        `;
+        userList.appendChild(li);
+    });
+}
+
+function editUser(id) {
+    const user = users.find(user => user.id == id);
+    if (user) {
+        document.getElementById('name').value = user.name;
+        document.getElementById('surname').value = user.surname;
+        document.getElementById('age').value = user.age;
+        document.getElementById('color').value = user.color;
+        editingUserId = id;
+        userModal.classList.remove('hidden');
+    }
+
+}
+
+searchInput.addEventListener('input', renderUsers);
+
+sortSelect.addEventListener('change', renderUsers);
+
+fetchUsers();
